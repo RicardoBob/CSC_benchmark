@@ -293,21 +293,5 @@ def main(model):
                     plot_learning_curves(history, epochs)
                     plt.savefig(filename+".png")
 
-    else:
-        # load data
-        x_train, y_train, x_test, y_test, classes = prepare_data_cnn()
-
-        # create the model
-        rnn_model = create_rnn(num_classes)
-
-        # compile and fit model
-        rnn_model, history = compile_and_fit_rnn(
-            rnn_model, x_train, y_train, x_test, y_test, batch_size, epochs)
-
-        # Evaluate trained model
-        score = rnn_model.evaluate(x_train, y_train)
-        print('Evaluation Loss:', score[0])
-        print('Evaluation Accuracy:', score[1])
-
 
 main('mlp')
