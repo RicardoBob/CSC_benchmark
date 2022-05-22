@@ -231,7 +231,6 @@ def main(model):
     batch_size = [2**i for i in range(5, 11)]
     epochs = 2
     n_folds = 5
-    apply_data_augmentation = False
     # iterator for activations
     A = ["relu", "tanh"]
     # iterator for number of neurons
@@ -240,6 +239,10 @@ def main(model):
     # load data
 
     if model == 'cnn':
+        batch_size = 128
+        epochs = 8
+        apply_data_augmentation = False
+
         # load data
         x_train, y_train, x_test, y_test, classes = prepare_data_cnn()
 
@@ -255,6 +258,13 @@ def main(model):
         print('Evaluation Loss:', score[0])
         print('Evaluation Accuracy:', score[1])
 
+        # plot learning curves
+        filename = "cnn_"+str(epochs)+"_"+str(batch_size)+"_" + "loss_" + \
+            "{:.3f}".format(score[0]) + "_" + \
+            "acc_"+"{:.3f}".format(score[1])
+        plot_learning_curves([history], epochs)
+        plt.savefig(filename+".png")
+
     elif model == 'mlp':
 
         layers_space = list(product(N, A))
@@ -267,7 +277,7 @@ def main(model):
                 for n, a in layers_space:
                     layers = [(n, a)] * nl
                     # picture plots filename
-                    filename = str(epochs)+"_"+str(batch)
+                    filename = "mlp_"+str(epochs)+"_"+str(batch)
                     for n, a in layers:
                         filename += "_" + "(" + str(n) + "-" + str(a) + ")"
                     filename += "_"
@@ -294,4 +304,4 @@ def main(model):
                     plt.savefig(filename+".png")
 
 
-main('mlp')
+main('cnn')
